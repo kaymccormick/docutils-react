@@ -3,5 +3,5 @@ module.exports = {
     "transform": {
 	"^.+\\.jsx?$": "babel-jest"
     },
-    setupTestFrameworkScriptFile: '<rootDir>/src/setupTests.js',
+    setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
 };

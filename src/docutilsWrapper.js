@@ -1,4 +1,4 @@
-import * as docutils from '../index';
+import * as docutils from './index';
 import styled from '@emotion/styled';
 
 const components = { ...docutils.components };

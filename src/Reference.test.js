@@ -1,5 +1,5 @@
 import Reference from './Reference';
-import Docutils from '../index';
+import Docutils from './index';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
