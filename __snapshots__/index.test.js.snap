@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`document with paragraph 1`] = `
+<div
+  className="docutils-document document"
+>
+  <p
+    className="paragraph"
+  >
+    test
+  </p>
+</div>
+`;
+
+exports[`literal_block results in properly styled element 1`] = `
+<div
+  className="doc-literal-block"
+/>
+`;
