@@ -30,3 +30,296 @@ exports[`parses a fragment containing only document node 1`] = `
   </section>
 </div>
 `;
+
+exports[`snippet 1: 1 1`] = `
+.emotion-0 {
+  padding: 1em;
+}
+
+<div
+  className="emotion-0 emotion-1 docutils-document document"
+>
+      
+  <div
+    className="document-toctree toctree-master"
+    docname="contents"
+    master="True"
+  >
+            
+    <div
+      className="toctree-list"
+    >
+                  
+      <div
+        className="toctree-list-item"
+      >
+                        
+        <a
+          className="toctree-link reference"
+          href="whatsnew/index"
+        >
+          Whats New in Python                
+        </a>
+                    
+      </div>
+              
+    </div>
+        
+  </div>
+</div>
+`;
+
+exports[`snippet links: links 1`] = `
+.emotion-26 {
+  padding: 1em;
+}
+
+<div
+  className="emotion-26 emotion-27 docutils-document document"
+>
+      
+  <div
+    className="document-toctree toctree-master"
+    docname="index"
+    master="True"
+  >
+            
+    <div
+      className="doc-caption"
+    >
+      Contents:
+    </div>
+            
+    <div
+      className="toctree-list"
+    >
+                  
+      <div
+        className="toctree-list-item"
+      >
+                        
+        <a
+          className="toctree-link reference"
+          href="intro"
+        >
+          Introduction                
+        </a>
+                        
+        <div
+          className="toctree-list"
+        >
+                              
+          <div
+            className="toctree-list-item"
+          >
+                                    
+            <a
+              className="toctree-link reference"
+              href="intro#dependencies"
+            >
+              Dependencies                        
+            </a>
+                                
+          </div>
+                              
+          <div
+            className="toctree-list-item"
+          >
+                                    
+            <a
+              className="toctree-link reference"
+              href="intro#middle-section"
+            >
+              Middle Section                        
+            </a>
+                                
+          </div>
+                              
+          <div
+            className="toctree-list-item"
+          >
+                                    
+            <a
+              className="toctree-link reference"
+              href="intro#final-section"
+            >
+              Final Section                        
+            </a>
+                                
+          </div>
+                          
+        </div>
+                    
+      </div>
+                  
+      <div
+        className="toctree-list-item"
+      >
+                        
+        <a
+          className="toctree-link reference"
+          href="other_junk"
+        >
+          Other Junk                
+        </a>
+                    
+      </div>
+              
+    </div>
+        
+  </div>
+      
+  <div
+    className="doc-links"
+  >
+            
+    <div
+      className="doc-document-ref"
+      xmlnsHref="testdoc1"
+      xmlnsRole="http://heptet.us/linkprops/document"
+    >
+              
+    </div>
+            
+    <div
+      className="doc-document-ref"
+      xmlnsHref="other_junk"
+      xmlnsRole="http://heptet.us/linkprops/document"
+    >
+              
+    </div>
+            
+    <div
+      className="doc-document-ref"
+      xmlnsHref="intro"
+      xmlnsRole="http://heptet.us/linkprops/document"
+    >
+              
+    </div>
+            
+    <div
+      className="doc-document-ref"
+      xmlnsHref="index"
+      xmlnsRole="http://heptet.us/linkprops/document"
+    >
+              
+    </div>
+            
+    <div
+      className="doc-document-ref"
+      xmlnsHref="a/a1"
+      xmlnsRole="http://heptet.us/linkprops/document"
+    >
+              
+    </div>
+            
+    <a
+      className="emotion-0 emotion-1 document-link"
+    >
+      Parent
+    </a>
+            
+    <a
+      className="emotion-0 emotion-1 document-link"
+    >
+      Previous topic
+    </a>
+            
+    <a
+      className="emotion-0 emotion-1 document-link"
+      href="intro"
+    >
+      Next topic
+    </a>
+            
+    <a
+      className="emotion-0 emotion-1 document-link"
+      href="index"
+    >
+      Parent
+    </a>
+            
+    <a
+      className="emotion-0 emotion-1 document-link"
+      href="index"
+    >
+      Previous topic
+    </a>
+            
+    <a
+      className="emotion-0 emotion-1 document-link"
+      href="other_junk"
+    >
+      Next topic
+    </a>
+            
+    <a
+      className="emotion-0 emotion-1 document-link"
+      href="https://www.npmjs.com/package/docutils-react"
+    >
+      docutils-react
+    </a>
+            
+    <a
+      className="emotion-0 emotion-1 document-link"
+      href="https://www.npmjs.com/package/sphinx-build-client"
+    >
+      sphinx-build-client
+    </a>
+            
+    <a
+      className="emotion-0 emotion-1 document-link"
+      href="https://www.npmjs.com/package/grunt-sphinx-plugin"
+    >
+      grunt-sphinx-plugin
+    </a>
+            
+    <a
+      className="emotion-0 emotion-1 document-link"
+      href="#example"
+    >
+      example
+    </a>
+            
+    <a
+      className="emotion-0 emotion-1 document-link"
+      href="index"
+    >
+      Parent
+    </a>
+            
+    <a
+      className="emotion-0 emotion-1 document-link"
+      href="intro"
+    >
+      Previous topic
+    </a>
+            
+    <a
+      className="emotion-0 emotion-1 document-link"
+    >
+      Next topic
+    </a>
+        
+  </div>
+</div>
+`;
+
+exports[`snippet self-closing document tag: self-closing document tag 1`] = `
+.emotion-0 {
+  padding: 1em;
+}
+
+<div
+  className="emotion-0 emotion-1 docutils-document document"
+/>
+`;
+
+exports[`snippet test: test 1`] = `
+<a
+  className="reference"
+  href="https://heptet.us/external"
+>
+  lala
+</a>
+`;

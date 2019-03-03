@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react';
 import { setupSaxParser, getComponentForTagName, attributesToProps } from './getComponentForXmlSax';
 import regeneratorRuntime from "regenerator-runtime";
-import './DocutilsXmlDocument.css';
+//import './DocutilsXmlDocument.css';
 
 async function myfunc(reader, parser) {
     while(true) {

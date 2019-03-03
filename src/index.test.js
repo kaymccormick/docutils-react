@@ -52,5 +52,5 @@ test('literal_block results in properly styled element', () => {
 test('document with paragraph', () => {
     const Document = docutils.components.Document;
     const Paragraph = docutils.components.Paragraph;
-    expect(renderer.create(<Document _children={<Paragraph _children="test"/>}/>).toJSON()).toMatchSnapshot();
+    expect(renderer.create(<Document children={<Paragraph children="test"/>}/>).toJSON()).toMatchSnapshot();
 });

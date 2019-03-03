@@ -80,7 +80,7 @@ function intervalFunc(me, context) {
 	    if(tag === "DocumentLink") {
 		// console.dir(a1);
 	    }
-	    const c = <Component {...att} _children={siblings}/>;
+	    const c = <Component {...att} children={siblings}/>;
 	    lastComponent = c;
 	} else {
 	    throw new Error("Invalid component");
@@ -273,6 +273,7 @@ Viewer.propTypes = {
     src: PropTypes.string.isRequired,
     docName: PropTypes.string,
     getComponent: PropTypes.func.isRequired,
+    children: PropTypes.func.isRequired,
 };
 
 export default Viewer;

@@ -1,6 +1,6 @@
 {
   "name": "docutils-react",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Docutils react components",
   "main": "lib/index.js",
   "author": "Kay McCormick <kay@kaymccormick.com>",

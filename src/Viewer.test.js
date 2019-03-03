@@ -22,7 +22,7 @@ test('renders without crashing', done => {
 	ReactDOM.unmountComponentAtNode(div);
 	done();
     };
-    ReactDOM.render(<Viewer getDocumentXml={getDocumentXmlFromFile} onComplete={onComplete} />, div);
+    ReactDOM.render(<Viewer getDocumentXml={getDocumentXmlFromFile} onComplete={onComplete}>{(a, b) => <div>{a}{b}</div>}</Viewer>, div);
     
 
 });
@@ -45,12 +45,12 @@ it('mounts without crashing', done => {
 	done();
     };
 
-    comp = renderer.create(<Viewer getDocumentXml={getDocumentXmlFromFile} onComplete={onComplete} />);
+    comp = renderer.create(<Viewer getDocumentXml={getDocumentXmlFromFile} onComplete={onComplete}>{(a, b) => <div>{a}{b}</div>}</Viewer>);
 });
 
 test('navigates to intro', () => {
     console.log('navigates to intro');
-    const wrapper = mount(<Viewer/>);
+    const wrapper = mount(<Viewer>{(a, b) => <div>{a}{b}</div>}</Viewer>);
     const app = wrapper.instance();
     return app.navigateToDocument('intro').catch(err => {
 	console.log(err);
@@ -67,7 +67,7 @@ test.skip('navigates to anchor', done => {
 	}
     };
 
-    const wrapper = mount(<Viewer getDocumentXml={getDocumentXmlFromFile} onComplete={onComplete}/>);
+    const wrapper = mount(<Viewer getDocumentXml={getDocumentXmlFromFile} onComplete={onComplete}>{(a, b) => <div>{a}{b}</div>}</Viewer>);
     const app = wrapper.instance();
 /*    app.navigateToDocument('index').then(r => {	
 	const ref = undefined;//findReference(app.state.document, child => child.ref.current.href.indexOf('intro') !== -1);

@@ -1,11 +1,18 @@
-//import React from 'react';
 import { jsx, css } from '@emotion/core'
 import React from 'react';
 import { getComponent} from './docutilsWrapper';
 
 import sax from 'sax';
 
-function tagNameToComponentName(tagname) {
+/*
+ * Function: tagNameToComponentNAme
+ *
+ * Converts a docutils element name to a corresponding docutils-react
+   component name. This is a simple mapping, since the tag names are
+   in snake_case and the component names are CamelCase.
+*/
+ 
+export function tagNameToComponentName(tagname) {
     let nName = tagname;
     if (!nName) {
 	throw new Error('Need a name for the node !?');
@@ -49,6 +56,10 @@ export function setupSaxParser(options) {
     const { container, context } = options;
     const parser = sax.parser(true);
 
+    if(context.getComponent === undefined) {
+	context.getComponent = getComponent;
+    }
+    
     context.nodes = [{dataChildren: []}];
     context.tags = [];
     context.siblings = [[]];
@@ -60,8 +71,8 @@ export function setupSaxParser(options) {
 
     parser.onclosetag = tagName => {
 	context.depth--;
-//	console.log(`[${context.depth}] close ${tagName}`);
-//	console.dir(context.siblings);
+	// console.log(`[${context.depth}] close ${tagName}`);
+	// console.dir(context.siblings);
 	const Component = context.getComponent(tagNameToComponentName(tagName));
 	context.tags.pop();
 	const thisNode = context.nodes.pop();
@@ -74,7 +85,7 @@ export function setupSaxParser(options) {
 	//const att = context.attributes.pop();
 	att.key = context.siblings[context.siblings.length - 1].length;
 	const makeComponent = () => {
-	    return <Component {...att} _children={siblings.map(f => f())}/>;
+	    return <Component {...att} children={siblings.map(f => f())}/>;
 	}
 	const makeData = () => {
 	    return [tagName, {...att}, thisNode.dataChildren.map(f => f())];
@@ -91,7 +102,7 @@ export function setupSaxParser(options) {
     parser.onopentag = node => {
 	// console.log('open ' + node.name);
 	// console.dir(context.siblings)
-//	console.log(`[${context.depth}] open ${node.name}`);
+	// console.log(`[${context.depth}] open ${node.name}`);
 	context.depth++;
 	context.nodes.push({ name: node.name, attributes: {...node.attributes}, dataChildren: [], children: [] });
 	context.tags.push(node.name);
