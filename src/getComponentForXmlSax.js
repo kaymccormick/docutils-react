@@ -32,6 +32,22 @@ export function tagNameToComponentName(tagname) {
     return rName;
 }
 
+
+export function attributeNameToPropName(attName) {
+}
+
+
+/**
+ * Function: attributesToProps
+ *
+ * Takes an object and returns a new object with the xml attribute
+ * names converted into react props. This doesn't convert things like
+ * 'for' to htmlFor - it removed colons used in XML Namespaces and
+ * capitalizes the following letter. For instance, xlink:href bcomes
+ * xlinkHref
+ *
+ */
+
 export function attributesToProps(att) {
     const props = {};
     for (let prop of Object.keys(att)) {
@@ -47,6 +63,7 @@ export function attributesToProps(att) {
     }
     return props;
 }
+
 
 export function getComponentForTagName(tagName) {
     return getComponent(tagNameToComponentName(tagName));
@@ -111,7 +128,10 @@ export function setupSaxParser(options) {
 	
     };
     parser.ontext = t => {
-	// console.log(t);	
+	if (t.trim() === '') {
+	    return;
+	}
+//	console.log(t);
 	context.siblings[context.siblings.length - 1].push(() => t);
 	context.nodes[context.nodes.length - 1].dataChildren.push(() => ['#text', {}, t]);
     };
