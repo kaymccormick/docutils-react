@@ -1,3 +1,7 @@
+/*
+ * module
+ * @module docutilsWrapper
+*/
 import * as docutils from './index';
 import styled from '@emotion/styled';
 
@@ -7,6 +11,7 @@ white-space: pre;
 font-family: monospace;
 `;
 
+/* Admonition */
 components.Admonition = styled(docutils.components.Admonition)`
     margin: 1em;
     border: 1px dashed black;

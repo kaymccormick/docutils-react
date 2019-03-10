@@ -5,6 +5,22 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
 	pkg: grunt.file.readJSON('package.json'),
+	"sphinx_plugin": {
+	    xml: {
+		options: {
+		    sourceRoot: 'doc',
+		    destDir: 'doc-out/xml',
+		    builder: 'xml'
+		}
+	    },
+	    html: {
+		options: {
+		    sourceRoot: 'doc',
+		    destDir: 'doc-out/html',
+		    builder: 'html'
+		}
+	    }
+	},
 	uglify: {
 	    options: {
 		banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
@@ -20,8 +36,6 @@ module.exports = function(grunt) {
 	    },
 	    dist: {
 		files: {
-		    "dist/app.js": "index.js",
-		    "dist/lib/Reference.js": "lib/Reference.js"
 		}
 	    }
 	}
@@ -30,9 +44,10 @@ module.exports = function(grunt) {
 
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-sphinx-plugin');
 
     // Default task(s).
-    grunt.registerTask('default', ["babel", 'uglify']);
+    grunt.registerTask('default', ["babel", 'uglify', 'sphinx_plugin:xml', 'sphinx_plugin:html']);
 
 };
 

@@ -91,8 +91,6 @@ export function setupSaxParser(options) {
 
     parser.onclosetag = tagName => {
 	context.depth--;
-	// console.log(`[${context.depth}] close ${tagName}`);
-	// console.dir(context.siblings);
 	const Component = context.getComponent(tagNameToComponentName(tagName));
 	context.tags.pop();
 	const thisNode = context.nodes.pop();
@@ -102,7 +100,6 @@ export function setupSaxParser(options) {
 	const liftUp = context.siblings.length == 2 && options.liftUpNodes && options.liftUpNodes.includes(tagName);
 	if (!context.siblings.length) { throw new Error("no siblings for " + tagName); }
 	const att = { getComponent: context.getComponent, ... attributesToProps(context.attributes.pop()), ...options.extraProps };
-	//const att = context.attributes.pop();
 	att.key = context.siblings[context.siblings.length - 1].length;
 	const makeComponent = () => {
 	    return <Component {...att} children={siblings.map(f => f())}/>;
@@ -114,15 +111,10 @@ export function setupSaxParser(options) {
 	if(!liftUp) {
 	    context.siblings[context.siblings.length - 1].push(makeComponent);
 	}
-//	console.log(context.nodes.length);
 	context.nodes[context.nodes.length - 1].dataChildren.push(makeData);
-	//console.dir(context.siblings);
     }
 	
     parser.onopentag = node => {
-	// console.log('open ' + node.name);
-	// console.dir(context.siblings)
-	// console.log(`[${context.depth}] open ${node.name}`);
 	context.depth++;
 	context.nodes.push({ name: node.name, attributes: {...node.attributes}, dataChildren: [], children: [] });
 	context.tags.push(node.name);
@@ -134,7 +126,6 @@ export function setupSaxParser(options) {
 	if (t.trim() === '') {
 	    return;
 	}
-//	console.log(t);
 	context.siblings[context.siblings.length - 1].push(() => t);
 	context.nodes[context.nodes.length - 1].dataChildren.push(() => ['#text', {}, t]);
     };
