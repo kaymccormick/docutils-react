@@ -10,6 +10,7 @@ import sax from 'sax';
  * Converts a docutils element name to a corresponding docutils-react
    component name. This is a simple mapping, since the tag names are
    in snake_case and the component names are CamelCase.
+ * @param {string} tagName - Name of the docutils XML element tag.
 */
  
 export function tagNameToComponentName(tagname) {
@@ -34,6 +35,13 @@ export function tagNameToComponentName(tagname) {
 
 
 export function attributeNameToPropName(attName) {
+    let propName= attName;
+    const colonIndex = attName.indexOf(':');
+    if(colonIndex !== -1) {
+	propName = attName.substr(0, colonIndex) + attName.substr(colonIndex + 1, 1).toUpperCase() +
+	    attName.substr(colonIndex + 2);
+    }
+    return propName;
 }
 
 
@@ -50,15 +58,10 @@ export function attributeNameToPropName(attName) {
 
 export function attributesToProps(att) {
     const props = {};
-    for (let prop of Object.keys(att)) {
-	let destProp = prop;
-	const colonIndex = prop.indexOf(':');
-	if(colonIndex !== -1) {
-	    destProp = prop.substr(0, colonIndex) + prop.substr(colonIndex + 1, 1).toUpperCase() +
-		prop.substr(colonIndex + 2);
-	}
+    for (let attName of Object.keys(att)) {
+	const destProp = attributeNameToPropName(attName);
 	if(destProp) {
-	    props[destProp] = att[prop];
+	    props[destProp] = att[attName];
 	}
     }
     return props;

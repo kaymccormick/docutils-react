@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { setupSaxParser, getComponentForTagName, attributesToProps } from './getComponentForXmlSax';
 import regeneratorRuntime from "regenerator-runtime";
 //import './DocutilsXmlDocument.css';
+import nodeFetch from 'node-fetch';
 
 async function myfunc(reader, parser) {
     while(true) {
@@ -99,21 +100,14 @@ class DocutilsXmlDocument extends Component {
         }).bind(this);
 	me.count = 0;
 	//        this.timerId = setInterval(() => intervalFunc(me, context), 250);
-	const url = this.props.getDocumentUrl(this.props.docName);
-	console.log(`url is ${url}`);
-        fetch(url).then(
-	    response => {
-		if(!response.ok) {
-		    throw new Error(`Unable to retreieve URL ${url}`);
-		}
-		return response;
-	    }).then(window.fetch ? handleNativeFetchResponse(parser) : handleNodeFetchResponse(parser))
+	this.props.getDocumentStream({ docName: this.props.docName }).then(
+	    this.props.handleDocumentStream)
 	    .catch(err => {
 		if(me.timerId) {
 		    clearInterval(me.timerId);
 		    me.timerId = undefined;
 		}
-		console.log(`fetch error ${url}`);
+		console.log(`get stream error ${this.props.docName}`);
 		if(err.stack) {
 		    console.log(err.stack);
 		}
@@ -132,6 +126,7 @@ class DocutilsXmlDocument extends Component {
 
 DocutilsXmlDocument.propTypes = {
     loadingRender: PropTypes.func.isRequired,
+    handleDocumentStream: PropTypes.func.isRequired,
 };
 
 export default DocutilsXmlDocument;

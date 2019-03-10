@@ -41,12 +41,6 @@ const resolveUriRef = function(curDocName, href) {
     return { fragmentId: fragment, docName };
 }
 
-const getDocumentUrl = docName => {
-    // FIXME not sure what this needs to look like in varying circumstances!!
-    /* appending origin may be redundant. */
-    return document.location.origin + '/xml/' + docName + '.xml';
-}
-
 const getXmlDocumentComponent = (xmlData, extraProps, config) => {
     if(!config) {
         config = {};
@@ -91,9 +85,6 @@ function intervalFunc(me, context) {
     if(React.isValidElement(r)) {
 //	console.log('setting state component to');
 //	console.dir(r);
-	if(me.props.test1) {
-	    me.props.test1(r);
-	}
 //	console.dir(renderToString(r));
 	
 	me.setState({component: r}, () => console.log('updated component at inteval'));
@@ -106,11 +97,14 @@ function intervalFunc(me, context) {
 class Viewer extends Component {
     constructor(props) {
         super(props);
-        this.mainRef = React.createRef();
         this.handleNewDocument = (handleNewDocument(this)).bind(this);
 	this.referenceOnClick = this.referenceOnClick.bind(this);
 	this.handleToctreeData = this.handleToctreeData.bind(this);
-	this.getDocumentUrl = this.getDocumentUrl.bind(this);
+	if(props.getDocumentUrl) {
+	    this.getDocumentUrl = props.getDocumentUrl;
+	} else {
+	    this.getDocumentUrl = this.getDocumentUrl.bind(this);
+	}
         this.state = { docName: 'index', loading: true };
     }
     
@@ -232,6 +226,7 @@ class Viewer extends Component {
         }
 
 	return (this.props.children(<DocutilsXmlDocument
+				    getDocumentStream={this.props.getDocumentStream}
       handleData={this.handleToctreeData}
       css={{margin: '.8rem', border: 'dashed 1px #888888'}}
       getComponent={this.props.getComponent}
@@ -239,20 +234,21 @@ class Viewer extends Component {
       match={this.props.match} location={this.props.location} history={this.props.history}
       onClick={this.referenceOnClick({navigateToDocument: this.navigateToDocument.bind(this),
       getCurDocName: () => '_links'})}
-      getDocumentUrl={this.getDocumentUrl('_links')}
+				    getDocumentUrl={() => this.getDocumentUrl('_links')}
       onFail={handleLinksFail}
       onComplete={handleLinksComplete} extraProps={{}}
       getXmlDocumentComponent={getXmlDocumentComponent}
 	loadingRender={({loading}) => 'Loading'}
 				    docName="_links"/>,
       <DocutilsXmlDocument
+				    getDocumentStream={this.props.getDocumentStream}
 	getComponent={this.props.getComponent}
 	css={{margin: '.8rem', border: 'dashed 1px #888888'}}
 	referenceTemplate={this.props.referenceTemplate}
 	match={this.props.match} location={this.props.location} history={this.props.history}
 	onClick={this.referenceOnClick({navigateToDocument: this.navigateToDocument.bind(this),
 	getCurDocName: () => this.state.docName})}
-        getDocumentUrl={this.getDocumentUrl(this.getDocName())}
+				    getDocumentUrl={() => this.getDocumentUrl(this.getDocName())}
         ref={this.mainRef}
 	onFail={handleDocFail}
         onComplete={handleDocComplete}
@@ -271,9 +267,13 @@ getComponent: wrappedGetComponent,
 
 Viewer.propTypes = {
     src: PropTypes.string.isRequired,
-    docName: PropTypes.string,
     getComponent: PropTypes.func.isRequired,
     children: PropTypes.func.isRequired,
+    getDocumentUrl: PropTypes.func,
+    onComplete: PropTypes.func,
+    getDocumentStream: PropTypes.func.isRequired,
+
 };
 
 export default Viewer;
+
