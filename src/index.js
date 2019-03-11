@@ -212,10 +212,10 @@ export const Colspec = (props) => React.createElement('div', { 'className': 'doc
 export const Table = props => {
     const children = []
     for (let child of props.children) {
-	if(child.type = == Title) {
+	if(child.type === Title) {
 	    children.push(React.createElement('caption', { ...filterProps(props), key: 'caption' }, child.props.children));
-	} else if(child.type = == Colspec) {
-	} else if(child.type = = Tgroup) {
+	} else if(child.type === Colspec) {
+	} else if(child.type === Tgroup) {
 	    children.splice(children.length, ...child.props.children);
 	} else {
 	    children.push(child);

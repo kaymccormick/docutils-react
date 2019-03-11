@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react';
 import { setupSaxParser, getComponentForTagName, attributesToProps } from './getComponentForXmlSax';
-import regeneratorRuntime from "regenerator-runtime";
+import "@babel/polyfill";
 //import './DocutilsXmlDocument.css';
 import nodeFetch from 'node-fetch';
 
