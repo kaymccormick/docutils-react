@@ -1,3 +1,11 @@
+/**
+ * File: getComponentForSax.js
+ * Project: docutils-react
+ * Author: Kay McCormick <kay@kaymccormick.com>
+ * Copyright: 2019 Kay McCormick
+ * License: MIT
+ */
+
 import { jsx, css } from '@emotion/core'
 import React from 'react';
 import { getComponent} from './docutilsWrapper';
@@ -31,15 +39,16 @@ export function tagNameToComponentName(tagname) {
 }
 
 /**
- * Given an attribute name, return a suitable prop name. Does not filter prop names,
- * i.e., will not return null or throw in case of an invalid input - It performs a 
- * mechanical translation.
+ * Given an attribute name, return a suitable prop name. Does not
+ * filter prop names, i.e., will not return null or throw in case of
+ * an invalid input - It performs a mechanical translation.
  */
 export function attributeNameToPropName(attName) {
-    let propName= attName;
+    let propName = attName;
     const colonIndex = attName.indexOf(':');
     if(colonIndex !== -1) {
-	propName = attName.substr(0, colonIndex) + attName.substr(colonIndex + 1, 1).toUpperCase() +
+	propName = attName.substr(0, colonIndex) +
+	    attName.substr(colonIndex + 1, 1).toUpperCase() +
 	    attName.substr(colonIndex + 2);
     }
     return propName;
@@ -69,12 +78,16 @@ export function attributesToProps(att) {
 
 
 /**
- * given a tagname, retrieve the proper component *
+ * given a tagname, retrieve the proper component
  */
 export function getComponentForTagName(tagName) {
     return getComponent(tagNameToComponentName(tagName));
 }
 
+/**
+ * return a configured sax parser ready to parse XML and generate
+ * react components for us.
+ */
 export function setupSaxParser(options) {
     const { container, context } = options;
     const parser = sax.parser(true);
@@ -82,7 +95,8 @@ export function setupSaxParser(options) {
     if(context.getComponent === undefined) {
 	context.getComponent = getComponent;
     }
-    
+
+    /* nodes is not fully used/implemented, so careful */
     context.nodes = [{dataChildren: []}];
     context.tags = [];
     context.siblings = [[]];
@@ -98,11 +112,18 @@ export function setupSaxParser(options) {
 	context.tags.pop();
 	const thisNode = context.nodes.pop();
 
-	if (!context.siblings.length) { throw new Error("no siblings"); }
+	if (!context.siblings.length) {
+	    throw new Error("no siblings");
+	}
 	const siblings = context.siblings.pop();
-	const liftUp = context.siblings.length == 2 && options.liftUpNodes && options.liftUpNodes.includes(tagName);
-	if (!context.siblings.length) { throw new Error("no siblings for " + tagName); }
-	const att = { getComponent: context.getComponent, ... attributesToProps(context.attributes.pop()), ...options.extraProps };
+	const liftUp = context.siblings.length == 2 &&
+	      options.liftUpNodes && options.liftUpNodes.includes(tagName);
+	if (!context.siblings.length) {
+	    throw new Error("no siblings for " + tagName);
+	}
+	const att = { getComponent: context.getComponent,
+		      ... attributesToProps(context.attributes.pop()),
+		      ...options.extraProps };
 	att.key = context.siblings[context.siblings.length - 1].length;
 	const makeComponent = () => {
 	    return <Component {...att} children={siblings.map(f => f())}/>;
@@ -119,7 +140,10 @@ export function setupSaxParser(options) {
 	
     parser.onopentag = node => {
 	context.depth++;
-	context.nodes.push({ name: node.name, attributes: {...node.attributes}, dataChildren: [], children: [] });
+	/* nodes isn't fully maintained */
+	context.nodes.push({ name: node.name,
+			     attributes: {...node.attributes},
+			     dataChildren: [], children: [] });
 	context.tags.push(node.name);
 	context.siblings.push([]);
 	context.attributes.push({... node.attributes});
@@ -129,7 +153,8 @@ export function setupSaxParser(options) {
 	    return;
 	}
 	context.siblings[context.siblings.length - 1].push(() => t);
-	context.nodes[context.nodes.length - 1].dataChildren.push(() => ['#text', {}, t]);
+	context.nodes[context.nodes.length - 1].dataChildren.
+	    push(() => ['#text', {}, t]);
     };
 
     return { parser };
@@ -141,7 +166,10 @@ export function getComponentForXml(xmlData, config) {
 	config = {}
     }
     const saxContext = { };
-    const { parser } = setupSaxParser({extraProps: config.extraProps, liftUpNodes: config.liftUpNodes, container: config.container, context: saxContext });
+    const { parser } = setupSaxParser({extraProps: config.extraProps,
+				       liftUpNodes: config.liftUpNodes,
+				       container: config.container,
+				       context: saxContext });
     return new Promise((resolve, reject) => {
 	parser.onend = () => {
 	    const nodes = saxContext.siblings[0].map(f => f());
