@@ -214,8 +214,8 @@ export const Table = props => {
     for (let child of props.children) {
 	if(child.type === Title) {
 	    children.push(React.createElement('caption', { ...filterProps(props), key: 'caption' }, child.props.children));
-	} else if(child.type === Colspec) {
-	} else if(child.type === Tgroup) {
+	} else if(child.type === Colspec) {	
+} else if(child.type === Tgroup) {
 	    children.splice(children.length, ...child.props.children);
 	} else {
 	    children.push(child);
