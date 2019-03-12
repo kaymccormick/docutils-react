@@ -4,15 +4,12 @@ import { getComponent} from './docutilsWrapper';
 
 import sax from 'sax';
 
-/*
- * Function: tagNameToComponentNAme
- *
+/**
  * Converts a docutils element name to a corresponding docutils-react
-   component name. This is a simple mapping, since the tag names are
-   in snake_case and the component names are CamelCase.
+ * component name. This is a simple mapping, since the tag names are
+ * in snake_case and the component names are CamelCase.
  * @param {string} tagName - Name of the docutils XML element tag.
-*/
- 
+ */
 export function tagNameToComponentName(tagname) {
     let nName = tagname;
     if (!nName) {
@@ -33,7 +30,11 @@ export function tagNameToComponentName(tagname) {
     return rName;
 }
 
-
+/**
+ * Given an attribute name, return a suitable prop name. Does not filter prop names,
+ * i.e., will not return null or throw in case of an invalid input - It performs a 
+ * mechanical translation.
+ */
 export function attributeNameToPropName(attName) {
     let propName= attName;
     const colonIndex = attName.indexOf(':');
@@ -55,7 +56,6 @@ export function attributeNameToPropName(attName) {
  * xlinkHref
  *
  */
-
 export function attributesToProps(att) {
     const props = {};
     for (let attName of Object.keys(att)) {
@@ -68,6 +68,9 @@ export function attributesToProps(att) {
 }
 
 
+/**
+ * given a tagname, retrieve the proper component *
+ */
 export function getComponentForTagName(tagName) {
     return getComponent(tagNameToComponentName(tagName));
 }
@@ -120,7 +123,6 @@ export function setupSaxParser(options) {
 	context.tags.push(node.name);
 	context.siblings.push([]);
 	context.attributes.push({... node.attributes});
-	
     };
     parser.ontext = t => {
 	if (t.trim() === '') {
@@ -133,7 +135,7 @@ export function setupSaxParser(options) {
     return { parser };
 }
 
-/* callers call config extraProps ? */
+/* This may be untested/unused */
 export function getComponentForXml(xmlData, config) {
     if(!config) {
 	config = {}
@@ -142,14 +144,12 @@ export function getComponentForXml(xmlData, config) {
     const { parser } = setupSaxParser({extraProps: config.extraProps, liftUpNodes: config.liftUpNodes, container: config.container, context: saxContext });
     return new Promise((resolve, reject) => {
 	parser.onend = () => {
-	    // console.dir(saxContext.siblings[0]);
 	    const nodes = saxContext.siblings[0].map(f => f());
 	    const r = nodes.filter(React.isValidElement)[0];
 	    if(!React.isValidElement(r)) {
 		console.dir(r);
 		console.log('invalid element');
 	    }
-	    
 	    resolve(r);
 	};
 	parser.write(xmlData);
