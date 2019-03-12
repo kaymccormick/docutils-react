@@ -1,5 +1,4 @@
 import React from 'react'
-import DocViewer from '../src/components/doc/Viewer'
 import { setupSaxParser } from 'docutils-react/lib/getComponentForXmlSax'
 
 export default class Viewer extends React.Component {
@@ -110,10 +109,6 @@ export default class Viewer extends React.Component {
     }
 
     render() {
-	const props = { };
-	console.log('hello props');
-	console.log(Object.keys(this.props));
-//	getDocumentStream={Viewer.getDocumentStream}
 	return React.isValidElement(this.state.component) ? <div>{this.state.component}</div> : <div>invalid compoment</div>;
     }
 }
