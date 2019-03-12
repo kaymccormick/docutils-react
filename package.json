@@ -9,7 +9,8 @@
     "@emotion/core": "^10.0.6",
     "@emotion/styled": "^10.0.6",
     "react": "^16.6.3",
-    "react-dom": "^16.7.0"
+    "react-dom": "^16.7.0",
+    "sax": "^1.2.4"
   },
   "dependencies": {
     "@emotion/babel-preset-css-prop": "^10.0.6",
