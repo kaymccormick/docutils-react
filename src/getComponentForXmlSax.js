@@ -56,8 +56,6 @@ export function attributeNameToPropName(attName) {
 
 
 /**
- * Function: attributesToProps
- *
  * Takes an object and returns a new object with the xml attribute
  * names converted into react props. This doesn't convert things like
  * 'for' to htmlFor - it removed colons used in XML Namespaces and
@@ -89,9 +87,13 @@ export function getComponentForTagName(tagName) {
  * react components for us.
  */
 export function setupSaxParser(options) {
-    const { container, context } = options;
+    let { container, context } = options;
     const parser = sax.parser(true);
 
+    if(context === undefined) {
+	context = {}
+    }
+    
     if(context.getComponent === undefined) {
 	context.getComponent = getComponent;
     }
@@ -183,4 +185,29 @@ export function getComponentForXml(xmlData, config) {
 	parser.write(xmlData);
 	parser.close();
     });
+};
+
+/* This may be untested/unused */
+export function getComponentForXmlSync(xmlData, config) {
+    if(!config) {
+	config = {}
+    }
+    const saxContext = { };
+    const { parser } = setupSaxParser({extraProps: config.extraProps,
+				       liftUpNodes: config.liftUpNodes,
+				       container: config.container,
+				       context: saxContext });
+    const output = { };
+    parser.onend = () => {
+	const nodes = saxContext.siblings[0].map(f => f());
+	const r = nodes.filter(React.isValidElement)[0];
+	if(!React.isValidElement(r)) {
+	    console.dir(r);
+	    console.log('invalid element');
+	}
+	output.component = r;
+    };
+    parser.write(xmlData);
+    parser.close();
+    return output.component;
 };
