@@ -2,23 +2,26 @@
  * module
  * @module docutilsWrapper
 */
-import * as docutils from './index';
+import modern from './modern';
 import styled from '@emotion/styled';
+import React from 'react'
 
-const components = { ...docutils.components };
-components.LiteralBlock = styled(docutils.components.LiteralBlock)`
+const modernComponents = modern(React.createElement)
+
+const components = { ... modernComponents }
+components.LiteralBlock = styled(modernComponents.LiteralBlock)`
 white-space: pre;
 font-family: monospace;
 `;
 
 /* Admonition */
-components.Admonition = styled(docutils.components.Admonition)`
+components.Admonition = styled(modernComponents.Admonition)`
     margin: 1em;
     border: 1px dashed black;
     padding-left: .66rem;
 `;
 
-components.RelLinks = styled(docutils.components.RelLinks)`
+components.RelLinks = styled(modernComponents.RelLinks)`
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
@@ -29,9 +32,9 @@ components.RelLinks = styled(docutils.components.RelLinks)`
   }
 `;
 
-const DocumentLink = styled(docutils.components.DocumentLink)``;
+const DocumentLink = styled(modernComponents.DocumentLink)``;
 
-components.DocumentLinks = styled(docutils.components.DocumentLinks)`
+components.DocumentLinks = styled(modernComponents.DocumentLinks)`
  display: block;
  padding: 1em;
  border-radius: 3px;
@@ -41,7 +44,7 @@ components.DocumentLinks = styled(docutils.components.DocumentLinks)`
  }
 `;
 
-components.Document = styled(docutils.components.Document)`padding: 1em;`;
+components.Document = styled(modernComponents.Document)`padding: 1em;`;
 
 components.DocumentLink = DocumentLink;
 

@@ -7,26 +7,7 @@ exports[`parses a fragment containing only document node 1`] = `
 
 <div
   className="emotion-0 emotion-1 docutils-document document"
->
-  <section>
-    <h1
-      className="doc-title"
-    >
-      Introduction
-    </h1>
-    <p
-      className="paragraph"
-    >
-      This sample project is a demonstration of a React-based application            hosting a DocumentViewer component. The DocumentViewer component is            designed to process Docutils XML into a React component tree for            rendering. Itï¿½s especially designed for Sphinx XML output but should            also work with vanilla Docutils output (such as from 
-      <code
-        className="doc-literal"
-      >
-        rst2xml
-      </code>
-      ).
-    </p>
-  </section>
-</div>
+/>
 `;
 
 exports[`snippet 1: 1 1`] = `
