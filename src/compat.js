@@ -13,7 +13,7 @@ export default function(e) {
 	     BulletList: w('ul'),
 	     ListItem: w('li'),
 	     Address: w('address'),
-	     Admonition: (props) => e('div', { className: classNames(props.className), 'admonition'} ),
+	     Admonition: (props) => e('div', { className: classNames(props.className, 'admonition')} ),
 	     Authors: (props) => null,
 	     Author: (props) => null,
 	   }
