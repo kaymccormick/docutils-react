@@ -7,7 +7,7 @@ pipeline {
 	        sh 'yarn'
 		sh 'yarn compile'
 		sh 'mkdir -p build'
-		sh 'tar --exclude build --exclude-vcs -zcv . -f build/docutils-react.tar.gz'
+		sh 'tar --exclude node_modules --exclude build --exclude-vcs -zcv . -f build/docutils-react.tar.gz'
 
             }
         }
