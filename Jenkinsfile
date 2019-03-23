@@ -6,7 +6,16 @@ pipeline {
             steps {
 	        sh 'yarn'
 		sh 'yarn compile'
+		sh 'tar --exclude build --exclude-vcs --exclude-ignore-recursive=.gitignore -zcv -C .. docutils-react -f build/docutils-react.tar.gz'
+
             }
         }
     }
+
+    post {
+      always {
+      archiveArtifacts artifacts: 'build/docutils-react.tar.gz', fingerprint: true
+      }
+      }
+      
 }
