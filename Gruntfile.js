@@ -35,9 +35,11 @@ module.exports = function(grunt) {
 		sourceMap: true
 	    },
 	    dist: {
-		files: {
-		}
-	    }
+		cwd: 'src',
+		expand: true,
+		src: ['**/*.js'],
+		dest: 'lib',
+	    },
 	}
 	
     });
