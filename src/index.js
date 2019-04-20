@@ -29,15 +29,15 @@ const Document = props => React.createElement('div', { id: props.id, className: 
 const Reference = (props) => {
     let href;
     if (props.refuri) {
-	href = props.refuri;
+        href = props.refuri;
     } else if (props.refid) {
-	href = `#${props.refid}`;
+        href = `#${props.refid}`;
     }
     return React.createElement('a', {
  href,
-				      className: classNames(props.className, 'reference'),
+                                      className: classNames(props.className, 'reference'),
 },
-			       props.children);
+                               props.children);
 };
 
 /*
@@ -197,14 +197,14 @@ export const Colspec = props => React.createElement('div', { className: 'doc-col
 export const Table = (props) => {
     const children = [];
     for (const child of props.children) {
-	if (child.type === Title) {
-	    children.push(React.createElement('caption', { ...filterProps(props), key: 'caption' }, child.props.children));
-	} else if (child.type === Colspec) {
+        if (child.type === Title) {
+            children.push(React.createElement('caption', { ...filterProps(props), key: 'caption' }, child.props.children));
+        } else if (child.type === Colspec) {
 } else if (child.type === Tgroup) {
-	    children.splice(children.length, ...child.props.children);
-	} else {
-	    children.push(child);
-	}
+            children.splice(children.length, ...child.props.children);
+        } else {
+            children.push(child);
+        }
     }
     return React.createElement('table', {}, children);
 };
@@ -395,7 +395,7 @@ export const RelLinks = props => React.createElement('div', { className: 'doc-re
  */
 export const Image = props => React.createElement('img', {
  className: 'doc-image',
-					    src: props.uri,
+                                            src: props.uri,
 ...filterProps(props),
 });
 /**

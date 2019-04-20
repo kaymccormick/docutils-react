@@ -25,26 +25,26 @@ async function myfunc(reader, parser) {
 function myfunc2(stream, parser) {
     let chunk;
     while(null !== (chunk = stream.read())) {
-//	console.log(chunk);
+//      console.log(chunk);
         parser.write(chunk);
     }
 }
 
 function handleNativeFetchResponse(parser) {
     return response => {
-	const reader = response.body.getReader();
-	return myfunc(reader, parser).then(() => {
-	    reader.releaseLock();
-	    parser.close();
-	})
+        const reader = response.body.getReader();
+        return myfunc(reader, parser).then(() => {
+            reader.releaseLock();
+            parser.close();
+        })
     };
 }
 
 function handleNodeFetchResponse(parser) {
     return response => {
-	response.body.setEncoding('utf8');
-	response.body.on('readable', () => myfunc2(response.body, parser));
-	response.body.on('end', () => parser.close());
+        response.body.setEncoding('utf8');
+        response.body.on('readable', () => myfunc2(response.body, parser));
+        response.body.on('end', () => parser.close());
     };
 }
 
@@ -57,7 +57,7 @@ class DocutilsXmlDocument extends Component {
     
     componentDidUpdate(prevProps, prevState)
     {
-	console.log(`componentDidUpdate ${prevProps.docName} !== ? ${this.props.docName}`);
+        console.log(`componentDidUpdate ${prevProps.docName} !== ? ${this.props.docName}`);
         if(prevProps.docName !== this.props.docName) {
             /* Update document */
             this.updateDocument();
@@ -65,61 +65,61 @@ class DocutilsXmlDocument extends Component {
     }
 
     componentWillUnmount() {
-	if(this.timerId) {
-	    clearInterval(this.timerId);
-	    this.timerId = undefined;
-	}
+        if(this.timerId) {
+            clearInterval(this.timerId);
+            this.timerId = undefined;
+        }
     }
 
     updateDocument()
     {
-	console.log('updateDocument');
+        console.log('updateDocument');
         const context = { getComponent: this.props.getComponent };
-	// extraProps?
+        // extraProps?
         const { parser } = setupSaxParser({ context });
-	const me = this;
+        const me = this;
         parser.onend = (() => {
-	    console.log('end');
-	    const nodes = context.siblings[0].map(f => f());
-	    const r = nodes.filter(React.isValidElement)[0];
-	    if(!React.isValidElement(r)) {
+            console.log('end');
+            const nodes = context.siblings[0].map(f => f());
+            const r = nodes.filter(React.isValidElement)[0];
+            if(!React.isValidElement(r)) {
                 console.dir(r);
                 console.log('invalid element');
-		return;
-	    }
-	    const data = context.nodes[0].dataChildren.map(f => f()).filter(e => e[0] === 'document')[0];
-	    if(this.props.handleData) {
-		this.props.handleData(data);
-	    }
-	    this.setState({component: r, loading: false}, () => {
-		console.log('state has been set');
-		if(me.timerId) {
-		    clearInterval(me.timerId);
-		    this.timerId = undefined;
-		}
-		this.props.onComplete({ docName: me.props.docName});
-	    });
-	    
+                return;
+            }
+            const data = context.nodes[0].dataChildren.map(f => f()).filter(e => e[0] === 'document')[0];
+            if(this.props.handleData) {
+                this.props.handleData(data);
+            }
+            this.setState({component: r, loading: false}, () => {
+                console.log('state has been set');
+                if(me.timerId) {
+                    clearInterval(me.timerId);
+                    this.timerId = undefined;
+                }
+                this.props.onComplete({ docName: me.props.docName});
+            });
+            
         }).bind(this);
-	me.count = 0;
-	//        this.timerId = setInterval(() => intervalFunc(me, context), 250);
-	this.props.getDocumentStream({ docName: this.props.docName }).then(
-	    this.props.handleDocumentStream)
-	    .catch(err => {
-		if(me.timerId) {
-		    clearInterval(me.timerId);
-		    me.timerId = undefined;
-		}
-		console.log(`get stream error ${this.props.docName}`);
-		if(err.stack) {
-		    console.log(err.stack);
-		}
-		console.log(err);
-		this.setState({loading: false});
-		if(this.props.onFail) {
-		    this.props.onFail(this.props.docName, err);
-		}
-	    });
+        me.count = 0;
+        //        this.timerId = setInterval(() => intervalFunc(me, context), 250);
+        this.props.getDocumentStream({ docName: this.props.docName }).then(
+            this.props.handleDocumentStream)
+            .catch(err => {
+                if(me.timerId) {
+                    clearInterval(me.timerId);
+                    me.timerId = undefined;
+                }
+                console.log(`get stream error ${this.props.docName}`);
+                if(err.stack) {
+                    console.log(err.stack);
+                }
+                console.log(err);
+                this.setState({loading: false});
+                if(this.props.onFail) {
+                    this.props.onFail(this.props.docName, err);
+                }
+            });
     }
     
     render() {
