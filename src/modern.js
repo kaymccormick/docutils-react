@@ -4,9 +4,8 @@ import { wrapElement, filterProps } from './utils'
 
 export default function(e) {
     var w = wrapElement(e)
-    
-    return {
-	Reference: (props) => {
+
+    const Reference = (props) => {
 	    let href;
 	    if(props.refuri) {
 		href = props.refuri;
@@ -14,7 +13,10 @@ export default function(e) {
 		href = `#${props.refid}`;
 	    }
 	    return e('a', { href: href, className: classNames(props.className, 'reference') }, props.children);
-	},
+    };
+    
+    return {
+	Reference,
 	/**/ Document: (props) => e('div', { 'id': props.id, 'className': classNames(props.className, "docutils-document document") }, props.children),
 	/**/ Desc: (props) => e('div', { className: classnames(props.className, 'doc-desc', `doc-domain-${props.domain}`, `doc-objtype-${props.objType}`, `doc-desctype-${props.descType}`) }, props.children),
 	/**/ Section: w('section'),
@@ -47,10 +49,10 @@ export default function(e) {
 	/**/ Table: props => {
 	    const children = []
 	    for (let child of props.children) {
-		if(child.type === Title) {
+		if(child.type === 'Title') {
 		    children.push(e('caption', { ...filterProps(props), key: 'caption' }, child.props.children));
-		} else if(child.type === Colspec) {
-		} else if(child.type == Tgroup) {
+		} else if(child.type === 'Colspec') {
+		} else if(child.type === 'Tgroup') {
 		    children.splice(children.length, ...child.props.children);
 		} else {
 		    children.push(child);
@@ -60,7 +62,7 @@ export default function(e) {
 	    return e('table', {}, children);
 	},
 
-	/**/ Row: (props) => e('tr', { 'className': classNames(props.className, 'doc-row') }),
+	/**/ Row: (props) => e('tr', { 'className': classNames(props.className, 'doc-row') }, props.children ),
 	// componentize TODO
 	/**/ Entry: function(props) {
 	    let attrs = {};
@@ -125,6 +127,9 @@ export default function(e) {
 	/**/ Topic: (props) => e('div', { ...filterProps(props), 'className': classNames(props.className, 'doc-topic') }),
 	/**/ DescType: props => null,
 	/**/ Comment: props => null,
+	/**/ Transition: props => null,
+	/**/ Problematic: props => null,
+	/**/ SystemMessage: props => null,
 	/**/ DocumentLink: (props) => e('a', { onClick: props.referenceOnClick, 'href': props.xlinkHref, 'className': classNames(props.className, 'document-link') }, props.xlinkTitle),
 	/**/ DocumentLinks: (props) => e('div', { ...filterProps(props), 'className': classNames(props.className, 'document-links') }),
 	/**/ DocumentToctree: (props) => e('div', { ...filterProps(props), 'className': classNames(props.className, 'document-toctree', props.master ? 'toctree-master' : '') }),
