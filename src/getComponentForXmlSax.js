@@ -6,11 +6,11 @@
  * License: MIT
  */
 
-import { jsx, css } from '@emotion/core'
+import { jsx, css } from '@emotion/core';
 import React from 'react';
-import { getComponent} from './docutilsWrapper';
-
 import sax from 'sax';
+import { getComponent } from './docutilsWrapper';
+
 
 /**
  * Converts a docutils element name to a corresponding docutils-react
@@ -23,7 +23,7 @@ export function tagNameToComponentName(tagname) {
     if (!nName) {
         throw new Error('Need a name for the node !?');
     }
-    
+
     let rName = '';
     let uscore = nName.indexOf('_');
     while (uscore !== -1) {
@@ -34,7 +34,7 @@ export function tagNameToComponentName(tagname) {
     if (nName) {
         rName = rName + nName[0].toUpperCase() + nName.substring(1);
     }
-    
+
     return rName;
 }
 
@@ -46,10 +46,10 @@ export function tagNameToComponentName(tagname) {
 export function attributeNameToPropName(attName) {
     let propName = attName;
     const colonIndex = attName.indexOf(':');
-    if(colonIndex !== -1) {
-        propName = attName.substr(0, colonIndex) +
-            attName.substr(colonIndex + 1, 1).toUpperCase() +
-            attName.substr(colonIndex + 2);
+    if (colonIndex !== -1) {
+        propName = attName.substr(0, colonIndex)
+            + attName.substr(colonIndex + 1, 1).toUpperCase()
+            + attName.substr(colonIndex + 2);
     }
     return propName;
 }
@@ -65,9 +65,9 @@ export function attributeNameToPropName(attName) {
  */
 export function attributesToProps(att) {
     const props = {};
-    for (let attName of Object.keys(att)) {
+    for (const attName of Object.keys(att)) {
         const destProp = attributeNameToPropName(attName);
-        if(destProp) {
+        if (destProp) {
             props[destProp] = att[attName];
         }
     }
@@ -90,73 +90,74 @@ export function setupSaxParser(options) {
     let { container, context } = options;
     const parser = sax.parser(true);
 
-    if(context === undefined) {
-        context = {}
+    if (context === undefined) {
+        context = {};
     }
-    
-    if(context.getComponent === undefined) {
+
+    if (context.getComponent === undefined) {
         context.getComponent = getComponent;
     }
 
     /* nodes is not fully used/implemented, so careful */
-    context.nodes = [{dataChildren: []}];
+    context.nodes = [{ dataChildren: [] }];
     context.tags = [];
     context.siblings = [[]];
     context.attributes = [];
     context.depth = 0;
-    if(container !== undefined) {
+    if (container !== undefined) {
         context.container = container;
     }
 
-    parser.onclosetag = tagName => {
+    parser.onclosetag = (tagName) => {
         context.depth--;
         const Component = context.getComponent(tagNameToComponentName(tagName));
         context.tags.pop();
         const thisNode = context.nodes.pop();
 
         if (!context.siblings.length) {
-            throw new Error("no siblings");
+            throw new Error('no siblings');
         }
         const siblings = context.siblings.pop();
-        const liftUp = context.siblings.length == 2 &&
-              options.liftUpNodes && options.liftUpNodes.includes(tagName);
+        const liftUp = context.siblings.length == 2
+              && options.liftUpNodes && options.liftUpNodes.includes(tagName);
         if (!context.siblings.length) {
-            throw new Error("no siblings for " + tagName);
+            throw new Error(`no siblings for ${tagName}`);
         }
-        const att = { getComponent: context.getComponent,
-                      ... attributesToProps(context.attributes.pop()),
-                      ...options.extraProps };
+        const att = {
+ getComponent: context.getComponent,
+                      ...attributesToProps(context.attributes.pop()),
+                      ...options.extraProps,
+};
         att.key = context.siblings[context.siblings.length - 1].length;
-        const makeComponent = () => {
-            return <Component {...att} children={siblings.map(f => f())}/>;
-        }
-        const makeData = () => {
-            return [tagName, {...att}, thisNode.dataChildren.map(f => f())];
-        }
-        
-        if(!liftUp) {
+        const makeComponent = () => <Component {...att} children={siblings.map(f => f())}/>;
+        const makeData = () => [tagName, { ...att }, thisNode.dataChildren.map(f => f())];
+
+        if (!liftUp) {
             context.siblings[context.siblings.length - 1].push(makeComponent);
         }
         context.nodes[context.nodes.length - 1].dataChildren.push(makeData);
-    }
-        
-    parser.onopentag = node => {
+    };
+
+    parser.onopentag = (node) => {
         context.depth++;
         /* nodes isn't fully maintained */
-        context.nodes.push({ name: node.name,
-                             attributes: {...node.attributes},
-                             dataChildren: [], children: [] });
+        context.nodes.push({
+ name: node.name,
+                             attributes: { ...node.attributes },
+                             dataChildren: [],
+children: [],
+});
         context.tags.push(node.name);
         context.siblings.push([]);
-        context.attributes.push({... node.attributes});
+        context.attributes.push({ ...node.attributes });
     };
-    parser.ontext = t => {
+    parser.ontext = (t) => {
         if (t.trim() === '') {
             return;
         }
         context.siblings[context.siblings.length - 1].push(() => t);
-        context.nodes[context.nodes.length - 1].dataChildren.
-            push(() => ['#text', {}, t]);
+        context.nodes[context.nodes.length - 1].dataChildren
+            .push(() => ['#text', {}, t]);
     };
 
     return { parser };
@@ -164,19 +165,21 @@ export function setupSaxParser(options) {
 
 /* This may be untested/unused */
 export function getComponentForXml(xmlData, config) {
-    if(!config) {
-        config = {}
+    if (!config) {
+        config = {};
     }
     const saxContext = { };
-    const { parser } = setupSaxParser({extraProps: config.extraProps,
+    const { parser } = setupSaxParser({
+ extraProps: config.extraProps,
                                        liftUpNodes: config.liftUpNodes,
                                        container: config.container,
-                                       context: saxContext });
+                                       context: saxContext,
+});
     return new Promise((resolve, reject) => {
         parser.onend = () => {
             const nodes = saxContext.siblings[0].map(f => f());
             const r = nodes.filter(React.isValidElement)[0];
-            if(!React.isValidElement(r)) {
+            if (!React.isValidElement(r)) {
                 console.dir(r);
                 console.log('invalid element');
             }
@@ -185,23 +188,25 @@ export function getComponentForXml(xmlData, config) {
         parser.write(xmlData);
         parser.close();
     });
-};
+}
 
 /* This may be untested/unused */
 export function getComponentForXmlSync(xmlData, config) {
-    if(!config) {
-        config = {}
+    if (!config) {
+        config = {};
     }
     const saxContext = { };
-    const { parser } = setupSaxParser({extraProps: config.extraProps,
+    const { parser } = setupSaxParser({
+ extraProps: config.extraProps,
                                        liftUpNodes: config.liftUpNodes,
                                        container: config.container,
-                                       context: saxContext });
+                                       context: saxContext,
+});
     const output = { };
     parser.onend = () => {
         const nodes = saxContext.siblings[0].map(f => f());
         const r = nodes.filter(React.isValidElement)[0];
-        if(!React.isValidElement(r)) {
+        if (!React.isValidElement(r)) {
             console.dir(r);
             console.log('invalid element');
         }
@@ -210,5 +215,4 @@ export function getComponentForXmlSync(xmlData, config) {
     parser.write(xmlData);
     parser.close();
     return output.component;
-};
-export default getComponentForXmlSax(
+}
