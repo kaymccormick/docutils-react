@@ -211,3 +211,4 @@ export function getComponentForXmlSync(xmlData, config) {
     parser.close();
     return output.component;
 };
+export default getComponentForXmlSax(
