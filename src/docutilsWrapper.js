@@ -2,13 +2,13 @@
  * module
  * @module docutilsWrapper
 */
-import modern from './modern';
 import styled from '@emotion/styled';
-import React from 'react'
+import React from 'react';
+import modern from './modern';
 
-const modernComponents = modern(React.createElement)
+const modernComponents = modern(React.createElement);
 
-const components = { ... modernComponents }
+const components = { ...modernComponents };
 components.LiteralBlock = styled(modernComponents.LiteralBlock)`
 white-space: pre;
 font-family: monospace;
@@ -50,4 +50,4 @@ components.DocumentLink = DocumentLink;
 
 export function getComponent(componentName, node, root, context) {
     return components[componentName];
-};
+}
