@@ -32,8 +32,8 @@ const resolveUriRef = function (curDocName, href) {
     }
     while (docName.startsWith('../')) {
         docName = docName.substring(3);
-        const slash = curDocName.lastIndexOf('/');
-        curDocName = curDocName.substring(0, slash);
+        const slash2 = curDocName.lastIndexOf('/');
+        curDocName = curDocName.substring(0, slash2);
     }
     if (docName) {
         docName = (curDocName ? `${curDocName}/` : '') + docName;

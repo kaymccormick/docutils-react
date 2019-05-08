@@ -118,7 +118,7 @@ export function setupSaxParser(options) {
             throw new Error('no siblings');
         }
         const siblings = context.siblings.pop();
-        const liftUp = context.siblings.length == 2
+        const liftUp = context.siblings.length === 2
               && options.liftUpNodes && options.liftUpNodes.includes(tagName);
         if (!context.siblings.length) {
             throw new Error(`no siblings for ${tagName}`);

@@ -2,6 +2,10 @@ import React from 'react';
 import classNames from 'classnames';
 import { wrapElement, filterProps } from './utils';
 
+function make_class(name) {
+    return name.replace('+', '_');
+}
+
 export default function (e) {
     const w = wrapElement(e);
 
@@ -18,7 +22,7 @@ export default function (e) {
     return {
         Reference,
         /**/ Document: props => e('div', { id: props.id, className: classNames(props.className, 'docutils-document document') }, props.children),
-        /**/ Desc: props => e('div', { className: classnames(props.className, 'doc-desc', `doc-domain-${props.domain}`, `doc-objtype-${props.objType}`, `doc-desctype-${props.descType}`) }, props.children),
+        /**/ Desc: props => e('div', { className: classNames(props.className, 'doc-desc', `doc-domain-${props.domain}`, `doc-objtype-${props.objType}`, `doc-desctype-${props.descType}`) }, props.children),
         /**/ Section: w('section'),
         /**/ Title: props => e('h1', { className: classNames(props.className, 'doc-title') }, props.children),
         /**/ BulletList: w('ul'),
