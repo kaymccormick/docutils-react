@@ -1,4 +1,4 @@
-import { getComponentForXml } from "./getComponentForXmlSax";
+import { getComponentForXml } from "../src/getComponentForXmlSax";
 import xpath from "xpath";
 import React from "react";
 import { renderToString } from "react-dom/server";

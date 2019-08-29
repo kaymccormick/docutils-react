@@ -1,4 +1,4 @@
-import { getComponent } from './docutilsWrapper';
+import { getComponent } from '../src/docutilsWrapper';
 import { shallow } from 'enzyme';
 import renderer from 'react-test-renderer';
 
