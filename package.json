@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@emotion/babel-preset-css-prop": "^10.0.6",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "classnames": "^2.2.6"
   },
   "scripts": {
